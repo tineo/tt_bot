@@ -70,6 +70,8 @@ async def on_connect(event: ConnectEvent):
 # Escuchar al evento de comentario
 async def on_comment(event: CommentEvent) -> None:
     log_print(f"{event.user.unique_id} -> {event.comment}")
+    if event.user.unique_id == user_id:
+        send_ntfy(f"(chat) {event.user.unique_id} : {event.comment}")
 
 
 async def on_disconnect(event):
@@ -79,12 +81,10 @@ async def on_disconnect(event):
 
 # Escuchar al evento de regalo
 async def on_gift(event: GiftEvent):
-    if event.gift.streakable and event.streaking:
-        log_print(f"🎁🎁 {event.user.unique_id} envió {event.repeat_count} \"{event.gift.name}\" ({event.gift_id})")
-    elif event.gift.streakable and not event.streaking:
+    if event.gift.streakable and not event.streaking:
         log_print(f"🎁 {event.user.unique_id} envió {event.repeat_count} \"{event.gift.name}\" ({event.gift_id})")
     elif not event.gift.streakable:
-        log_print(f"🎁 {event.user.unique_id} envió \"{event.gift.name}\" ({event.gift_id})")
+        log_print(f"🎁🎁 {event.user.unique_id} envió \"{event.gift.name}\" ({event.gift_id})")
 
 
 # Escuchar un user uniendose al live
